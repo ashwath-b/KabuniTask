@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
     render json: { errors: [ { detail: "Access denied, Not authorized for this operation" } ] }, status: 401
   end
 
-  def generate_url(page, per_page, class_name, short_url_id = nil)
+  def generate_url(page, per_page, short_url_id)
     if short_url_id.nil?
       "http://my-domain.com/short_urls?page=#{page}&per_page=#{per_page}"
     else
