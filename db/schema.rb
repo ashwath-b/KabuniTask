@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20161220143101) do
     t.string   "original_url"
     t.string   "shorty"
     t.integer  "user_id"
-    t.integer  "visits_count"
+    t.integer  "visits_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

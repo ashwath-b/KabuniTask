@@ -7,11 +7,17 @@ class ShortUrlsController < ApplicationController
   def index
     @short_urls = @user.short_urls.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
     result = []
-    result << @short_urls
-    paging = {}
-    paging[:next] = generate_url(@short_urls.next_page, @short_urls.per_page) if @short_urls.current_page < @short_urls.total_pages
-    paging[:previous] = generate_url(@short_urls.previous_page, @short_urls.per_page) if @short_urls.current_page > 1
-    result << paging
+    if @short_urls.count > 0
+      result << @short_urls
+      paging = {}
+      paging[:next] = generate_url(@short_urls.next_page, @short_urls.per_page) if @short_urls.current_page < @short_urls.total_pages
+      paging[:previous] = generate_url(@short_urls.previous_page, @short_urls.per_page) if @short_urls.current_page > 1
+      result << paging
+    else
+      error = {}
+      error[:message] = "You haven't created Short URLs yet!"
+      result << error
+    end
     render json: result
   end
 
@@ -19,9 +25,22 @@ class ShortUrlsController < ApplicationController
   # GET /short_urls/1.json
   def show
     if @short_url
-      render json: @short_url.short_visits.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+      short_visits = @short_url.short_visits.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+      result = []
+      if short_visits.count > 0
+        result << short_visits
+        paging = {}
+        paging[:next] = generate_url(short_visits.next_page, short_visits.per_page, @short_url.id) if short_visits.current_page < short_visits.total_pages
+        paging[:previous] = generate_url(short_visits.previous_page, short_visits.per_page, @short_url.id) if short_visits.current_page > 1
+        result << paging
+      else
+        error = {}
+        error[:message] = "No visitors yet!!"
+        result << error
+      end
+      render json: result
     else
-      render json: {message: "No short_url with given id"}, status: 204
+      render json: {message: "No short_url with given id in your ShortUrl list."}, status: 404
     end
   end
 
@@ -33,7 +52,7 @@ class ShortUrlsController < ApplicationController
     if @short_url.save
       short_url = @short_url
       short_url.shorty = "http://www.my-domain.com/#{@short_url.shorty}"
-      render json: short_url, status: :created, location: @short_url
+      render json: short_url, status: :created
     else
       render json: @short_url.errors, status: :unprocessable_entity
     end
@@ -59,7 +78,7 @@ class ShortUrlsController < ApplicationController
     if @short_url.destroy
       head :no_content
     else
-      render json: {message: "No short_url with given id"}, status: 204
+      render json: {message: "No short_url with given id"}
     end
   end
 

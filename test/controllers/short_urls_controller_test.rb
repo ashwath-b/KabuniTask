@@ -26,7 +26,7 @@ class ShortUrlsControllerTest < ActionController::TestCase
 
   test "Should only show owner short_url and responds in json" do
     get :show, id: 3
-    assert_response 204
+    assert_response 404
     get :show, id: @short_url
     assert_equal Mime::JSON, response.content_type
     assert_response 200

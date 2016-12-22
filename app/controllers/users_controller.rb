@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     user = User.authenticate(params[:email], params[:password])
     if user
       auth_token = user.auth_token
-      render json: {auth_token: auth_token, message: "Logged in"}
+      render json: {auth_token: auth_token, message: "Logged in"}, status: 200
     else
       invalid_login_attempt
     end
