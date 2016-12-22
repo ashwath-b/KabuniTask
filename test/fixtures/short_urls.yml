@@ -1,0 +1,22 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  original_url: http://example.com/index.html
+  shorty: http://exmpl.cm/indx
+  user_id: 1
+  visits_count: 1
+
+two:
+  id: 2
+  original_url: http://example.com/show.html
+  shorty: http://exmpl.cm/shw
+  user_id: 1
+  visits_count: 1
+
+three:
+  id: 3
+  original_url: http://example3.com/index.html
+  shorty: http://exmpl.c/idx
+  user_id: 2
+  visits_count: 1

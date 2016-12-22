@@ -1,0 +1,39 @@
+URL shortener API with Authentication
+
+User
+  Signup:
+    curl -X POST --data "email=uname@domain.com&password=12345678&password_confirmation=12345678" http://my-domain.com/sign_up
+
+  Login:
+    curl -X GET --data "email=uname@domain.com&password=12345678" http://my-domain.com/login
+    Responds with access_token, to be used for future authenticated calls
+
+ShortUrl
+
+  index:
+    curl -H "Authorization: Token token=your_access_token" -X GET http://my-domain.com/short_urls
+    OR
+    curl -H "Authorization: Token token=your_access_token" -X GET --data "page=1&per_page=5" http://my-domain.com/short_urls
+
+    page & per_page parameters if nil defaults to 1 & 5 respectively
+    And returns the paginated result with next and previous links.
+
+  show:
+    curl -H "Authorization: Token token=your_access_token" -X GET http://my-domain.com/short_urls/:id
+    OR
+    curl -H "Authorization: Token token=your_access_token" -X GET --data "page=1&per_page=5" http://my-domain.com/short_urls/:id
+
+    page & per_page parameters if nil defaults to 1 & 5 respectively
+    And returns the paginated result with next and previous links.
+
+  destroy:
+    curl -H "Authorization: Token token=your_access_token" -X DELETE http://my-domain.com/short_urls/:id
+
+  update:
+    curl -H "Authorization: Token token=your_access_token" -X PATCH --data "original_url=http://www.url.com/index" http://my-domain.com/short_urls/:id
+
+  create:
+    curl -H "Authorization: Token token=your_access_token" -X POST --data "original_url=http://www.url.com/index" http://my-domain.com/short_urls/
+
+  redirect_to original_url:
+    curl -X GET http://my-domain.com/shorty
