@@ -16,10 +16,4 @@ class ShortVisit < ActiveRecord::Base
     end
   end
 
-  def self.generate_url(url, params = {})
-    uri = URI(url)
-    uri.query = params.to_query
-    uri.to_s
-  end
-
 end
