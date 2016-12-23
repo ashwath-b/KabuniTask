@@ -6,17 +6,12 @@ class ShortUrlsController < ApplicationController
   # GET /short_urls.json
   def index
     @short_urls = @user.short_urls.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-    result = []
     if @short_urls.count > 0
-      result << @short_urls
-      paging = {}
-      paging[:next] = generate_url(@short_urls.next_page, @short_urls.per_page) if @short_urls.current_page < @short_urls.total_pages
-      paging[:previous] = generate_url(@short_urls.previous_page, @short_urls.per_page) if @short_urls.current_page > 1
-      result << paging
+      result = DataFormat.data_formatter(@short_urls, params[:page].to_i)
     else
       error = {}
       error[:message] = "You haven't created Short URLs yet!"
-      result << error
+      result = error
     end
     render json: result
   end
@@ -26,17 +21,12 @@ class ShortUrlsController < ApplicationController
   def show
     if @short_url
       short_visits = @short_url.short_visits.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-      result = []
       if short_visits.count > 0
-        result << short_visits
-        paging = {}
-        paging[:next] = generate_url(short_visits.next_page, short_visits.per_page, @short_url.id) if short_visits.current_page < short_visits.total_pages
-        paging[:previous] = generate_url(short_visits.previous_page, short_visits.per_page, @short_url.id) if short_visits.current_page > 1
-        result << paging
+        result = DataFormat.data_formatter(short_visits, params[:page].to_i, @short_url.id)
       else
         error = {}
         error[:message] = "No visitors yet!!"
-        result << error
+        result = error
       end
       render json: result
     else
