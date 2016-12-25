@@ -3,7 +3,7 @@ class ShortVisit < ActiveRecord::Base
 
   belongs_to :short_url
   validates_presence_of :short_url_id, :visitor_ip
-  validates :visitor_ip, presence: true, uniqueness: { scope: :short_url_id, message: "Not a new user"}
+  validates :visitor_ip, presence: true, uniqueness: { scope: :short_url_id, message: "Not a new visitor"}
   before_validation :update_info
 
   def update_info

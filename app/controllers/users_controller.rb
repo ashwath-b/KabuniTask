@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   def login
     user = User.authenticate(params[:email], params[:password])
     if user
-      auth_token = user.auth_token
-      render json: {auth_token: auth_token, message: "Logged in"}, status: 200
+      render json: user, status: 200
     else
       invalid_login_attempt
     end
@@ -13,12 +12,7 @@ class UsersController < ApplicationController
   def sign_up
     @user = User.new(user_params)
     if @user.save
-      user = {}
-      user[:name] = @user.name
-      user[:email] = @user.email
-      user[:access_token] = @user.auth_token
-      user[:message] = "Successfully Signed up"
-      render json: user, status: 200
+      render json: @user, status: 200
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -31,6 +25,6 @@ class UsersController < ApplicationController
   end
 
   def invalid_login_attempt
-    render json: { errors: [ { detail:"Error with your login or password" }]}, status: 401
+    render json: { errors: [ { message:"Error with your login or password" }]}, status: 401
   end
 end

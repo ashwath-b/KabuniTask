@@ -2,10 +2,10 @@ class ShortUrl < ActiveRecord::Base
 
   before_validation :generate_shorty
   validates_presence_of :user_id
-  validates :original_url, presence: true, uniqueness: true
+  validates :original_url, presence: true, format: {with: URI::regexp(%w(http https)), message: "URL must start with http:// or https://"}, uniqueness: {case_sensitive:false, scope: :user_id}
   validates :shorty, uniqueness: true, presence: true
   belongs_to :user
-  has_many :short_visits
+  has_many :short_visits #, :dependent => :destroy
 
   def update_short_visit(ip)
     self.short_visits.build(:visitor_ip => ip)

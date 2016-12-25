@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   attr_accessor :password
+
   before_validation :encrypt_password, :generate_token
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX } , uniqueness: { case_sensitive:false }
@@ -7,7 +8,7 @@ class User < ActiveRecord::Base
   validates_presence_of :password_salt, :password_hash
   validates_presence_of :auth_token, uniqueness: true
 
-  has_many :short_urls
+  has_many :short_urls #, :dependent => :destroy
 
   def encrypt_password
     if password.present?

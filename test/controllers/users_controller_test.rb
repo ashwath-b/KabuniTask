@@ -16,7 +16,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal Mime::JSON, response.content_type
     result = json(response.body)
-    access_token = result[:auth_token]
+    access_token = result[:data][:attributes][:token]
     assert_equal access_token, @user.auth_token
   end
 

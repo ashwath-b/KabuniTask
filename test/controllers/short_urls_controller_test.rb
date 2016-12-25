@@ -38,7 +38,7 @@ class ShortUrlsControllerTest < ActionController::TestCase
     short_url = short_urls(:three)
     put :update, id: short_url.id, short_url: { original_url: short_url.original_url, shorty: short_url.shorty}
     result = json(response.body)
-    text = result[:message]
+    text = result[:errors][:message]
     assert_equal text, "No short_url with given id"
   end
 
